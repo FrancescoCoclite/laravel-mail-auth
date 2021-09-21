@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -47,11 +48,20 @@ class PostController extends Controller
         $request->validate([
             'title'=>'required',
             'content'=>'required',
+            'image' => 'nullable|image'
         ]);
         $data = $request->all();
         $newPost = new Post();
         $newPost->slug = Str::slug($data['title'],'-');
+
+        if(array_key_exists('image',$data)){
+            
+            $cover_path = Storage::put('covers', $data['image']);
+            $data['cover'] = $cover_path;
+        }
+        
         $newPost->fill($data);
+        
 
         $newPost->save();
         

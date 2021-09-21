@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<form action="{{route('admin.posts.store')}}" method="post">
+<form action="{{route('admin.posts.store')}}" method="post" enctype="multipart/form-data">
   @if($errors->any())
           <div class="alert alert-danger">
               <ul>
@@ -15,6 +15,8 @@
     <label for="titolo" class="form-label">Titolo</label>
     <input type="text" name="title" class="form-control" id="titolo" aria-describedby="emailHelp">
   </div>
+
+
   <div class="mb-3">
   <label for="category" class="form-label">Categoria</label>
   <select name="category_id" id="category" class="form-control">
@@ -31,10 +33,26 @@
       @endforeach
   </select>
   </div>
-    <div class="form-floating">
-        <label for="descrizione" class="form-label">Descrizione</label>
-        <textarea class="form-control" name="content" id="descrizione" style="height: 100px"></textarea>
+
+
+  <div class="form-floating mb-3">
+      <label for="descrizione" class="form-label">Descrizione</label>
+      <textarea class="form-control" name="content" id="descrizione" style="height: 100px"></textarea>
     </div>
+
+
+    <div class="mb-3">
+        <label for="img" class="form-label">Immagine</label>
+        <input id="img" type="file" name="image" class="form-control-file 
+        @error('image') 
+        is-invalid 
+        @enderror">
+        @error('image')
+                <div class="alert alert-danger">{{ $message }}</div>
+        @enderror 
+    </div>
+
+
     <div>
         <h5 class="mt-2">Tag</h5>
         @foreach($tags as $tag)
@@ -43,7 +61,6 @@
             <label for="tag{{$loop->iteration}}">{{ $tag->name }}</label>
         @endforeach
     </div>
-
 
   <button type="submit" class="btn btn-primary mt-5">Submit</button>
 </form>
